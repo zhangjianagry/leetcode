@@ -1,4 +1,4 @@
-104.
+problems:104.
 
 /**
  * Definition for a binary tree node.
@@ -15,5 +15,90 @@ class Solution {
         else 
             return Math.max(maxDepth(root.left), maxDepth(root.right))+1;
         
+    }
+}
+
+
+
+problems:695.
+
+
+class Solution {
+    int[][] grid;
+    boolean[][] seen;
+    //seen is important for the speed and correctness 
+	public int maxAreaOfIsland(int[][] grid) {
+        this.grid = grid;
+        seen = new boolean[grid.length][grid[0].length];
+        int ans = 0;
+        for(int i=0; i<grid.length; i++) 
+            for(int j=0; j<grid[0].length; j++) {
+                if(seen[i][j] == false && grid[i][j] == 1)
+                    ans = Math.max(area(i, j), ans);
+            }
+        return ans;
+    }
+    
+    public int area(int i, int j) {
+        if(i <0 || i >= grid.length || j<0 || j>= grid[0].length || grid[i][j] == 0 || seen[i][j] == true) return 0;
+        seen[i][j] = true;
+        return (1+area(i, j+1) + area(i, j-1) + area(i-1, j) + area(i+1, j));
+    }
+}
+
+
+
+problems:690.
+
+/*
+// Employee info
+class Employee {
+    // It's the unique id of each node;
+    // unique id of this employee
+    public int id;
+    // the importance value of this employee
+    public int importance;
+    // the id of direct subordinates
+    public List<Integer> subordinates;
+};
+*/
+class Solution {
+    //首先将emplyee和id关联起来
+    Map<Integer, Employee> emap;
+    public int getImportance(List<Employee> employees, int id) {
+        emap = new HashMap<Integer, Employee>();
+        for(Employee e : employees) emap.put(e.id, e);
+        return dfs(id);
+    }
+    
+    public int dfs(int id) {
+        Employee e = emap.get(id);
+        int res = e.importance;
+        for(Integer a : e.subordinates) {
+            res += dfs(a);
+        }
+        return res;
+    }
+}
+
+
+problems: 733
+
+//hard code
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int color = image[sr][sc];
+        if(color != newColor) dfs(image, sr, sc, color, newColor);
+        return image;
+    }
+    
+    public void dfs(int[][] image, int sr, int sc, int color, int newColor) {
+        if(image[sr][sc] == color) {
+            image[sr][sc] = newColor;
+            if(sr >= 1)  dfs(image, sr-1, sc, color, newColor);
+            if(sc >= 1)  dfs(image, sr, sc-1, color, newColor);
+            if(sr < image.length-1) dfs(image, sr+1, sc, color, newColor);
+            if(sc < image[0].length-1) dfs(image, sr, sc+1, color, newColor);
+        }
     }
 }
